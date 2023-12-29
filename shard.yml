@@ -1,8 +1,9 @@
-name: chatgpt-preloader
+---
+name: code-preloader
 version: 0.1.0
 
 targets:
-  chatgpt-preloader:
+  code-preloader:
     main: src/main.cr
 
 authors:

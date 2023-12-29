@@ -3,9 +3,9 @@
 
 require "./cli"
 
+
 # Now that we have checked for nil, it's safe to use not_nil!
-app = CodePreloader::Cli.new
-app.parse_arguments(ARGV)
+app = CodePreloader::Cli.new(ARGV)
 app.exec()
 
 

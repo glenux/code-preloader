@@ -2,4 +2,4 @@
 all: build
 
 build:
-	shards build
+	shards build --error-trace

@@ -7,16 +7,15 @@ require "option_parser"
 module CodePreloader
   # The Cli class handles command-line interface operations for the CodePreloader.
   class Cli
-    getter repo_path : String
+    getter repository_path : String?
     getter ignore_list : Array(String) = [] of String
-    getter output_file_path : String
-    getter preamble_file_path : String?
+    getter output_file_path : String?
     getter header_prompt_file_path : String? # Add type annotation
     getter footer_prompt_file_path : String? # Assuming you'll also need this
 
     # Initializes the Cli class with default values.
     def initialize
-      @repo_path = ""
+      @repository_path = ""
       @output_file_path = ""
     end
 
@@ -54,7 +53,7 @@ module CodePreloader
           if remaining_args.size != 1
             abort("Invalid number of arguments. Expected exactly one argument for ROOT_DIR.")
           end
-          @repo_path = remaining_args[0]
+          @repository_path = remaining_args[0]
         end
       end
 
@@ -63,21 +62,45 @@ module CodePreloader
 
       # Executes the main functionality of the CLI application.
     def exec
-      if preamble_file_path
-        STDERR.puts "Loading preamble from: #{preamble_file_path}"
+      header_prompt = ""
+      footer_prompt = ""
+      __header_prompt_file_path = @header_prompt_file_path
+      __footer_prompt_file_path = @footer_prompt_file_path
+
+      if !__header_prompt_file_path.nil?
+        STDERR.puts "Loading header prompt from: #{__header_prompt_file_path}"
+        header_prompt = File.read(__header_prompt_file_path)
       end
 
-      if header_prompt_file_path
-        STDERR.puts "Loading header prompt from: #{header_prompt_file_path}"
+      if !__footer_prompt_file_path.nil?
+        STDERR.puts "Loading footer prompt from: #{__footer_prompt_file_path}"
+        footer_prompt = File.read(__footer_prompt_file_path)
       end
 
-      if footer_prompt_file_path
-        STDERR.puts "Loading footer prompt from: #{footer_prompt_file_path}"
-      end
+      STDERR.puts "Processing repository: #{repository_path}"
 
-      STDERR.puts "Processing repository: #{repo_path}"
-      process_repository
-      STDERR.puts "Processing completed. Output written to: #{@output_file_path.empty? ? "stdout" : @output_file_path}"
+      __output_file_path = @output_file_path
+      __repository_path = @repository_path 
+
+      abort("@output_file_path should be non-nil here") if __output_file_path.nil?
+      abort("@repository_path should be non-nil here") if __repository_path.nil?
+
+      invalid_output_file = true
+      output_file = STDOUT
+
+      unless __output_file_path.nil? || __output_file_path.try(&.empty?) || (__output_file_path != "-")
+        output_file = File.open(__output_file_path, "w")
+        invalid_output_file = false
+      end 
+
+      output_file.puts header_prompt if header_prompt_file_path
+
+      process_repository(__repository_path, output_file)
+
+      output_file.puts footer_prompt if footer_prompt_file_path
+
+      output_file.close if !invalid_output_file
+      STDERR.puts "Processing completed. Output written to: #{invalid_output_file ? "stdout" : __output_file_path}"
 
     rescue e : Exception
       STDERR.puts "An error occurred during execution: #{e.message}"
@@ -85,19 +108,9 @@ module CodePreloader
     end
 
     # Processes the specified repository and writes the output to a file.
-    def process_repository
-      local_output_file_path = @output_file_path
-      must_close = false
-      output_file = STDOUT
+    def process_repository(repository_path : String, output_file : IO::FileDescriptor)
 
-      if !local_output_file_path.empty? && (local_output_file_path != "-")
-        output_file = File.open(local_output_file_path, "w")
-        must_close = true
-      end 
-
-      output_file.puts preamble_text if preamble_file_path
-      process_directory(repo_path, output_file)
-      output_file.close if must_close
+      process_directory(repository_path, output_file)
 
     rescue e : IO::Error
       STDERR.puts "Error processing repository: #{e.message}"
@@ -115,7 +128,7 @@ module CodePreloader
         )
         next if !ignores.empty?
         
-        puts "File: #{child_path}"
+        STDERR.puts "File: #{child_path}"
         child_path = File.join(path, child)
         if File.directory?(child_path)
           process_directory(child_path, output_file)
@@ -126,7 +139,10 @@ module CodePreloader
     end
 
     private def process_file(file_path : String, output_file : IO::FileDescriptor)
-      relative_file_path = file_path.sub(/^#{Regex.escape(repo_path)}/, ".").lstrip
+      __repository_path = @repository_path
+      abort("@repository_path should be non-nil here") if __repository_path.nil?
+
+      relative_file_path = file_path.sub(/^#{Regex.escape(__repository_path)}/, ".").lstrip
       output_file.puts "@@ File \"#{relative_file_path}\""
       output_file.puts ""
       output_file.puts(File.read(file_path))
@@ -144,8 +160,9 @@ module CodePreloader
     end
 
     private def validate_arguments
-      abort("Missing repository path.") if repo_path.empty?
-      STDERR.puts("Output file path not specified (using STDOUT)") if output_file_path.empty?
+      abort("Missing repository path.") if @repository_path.nil? || @repository_path.try(&.empty?)
+      abort("Missing repository path.") if 
+      STDERR.puts("Output file path not specified (using STDOUT)") if @output_file_path.nil? || @output_file_path.try(&.empty?)
     end
 
     # Reads and returns a list of paths to ignore from the given file.

@@ -28,11 +28,11 @@ module CodePreloader
           @output_file_path = output_file
         end
 
-        parser.on("--header-prompt=HEADER_PROMPT_FILE", "Load header prompt from HEADER_PROMPT_FILE") do |header_prompt_file|
+        parser.on("-H HEADER_PROMPT_FILE", "--header-prompt=HEADER_PROMPT_FILE", "Load header prompt from HEADER_PROMPT_FILE") do |header_prompt_file|
           @header_prompt_file_path = header_prompt_file
         end
 
-        parser.on("--footer-prompt=FOOTER_PROMPT_FILE", "Load footer prompt from FOOTER_PROMPT_FILE") do |footer_prompt_file|
+        parser.on("-F FOOTER_PROMPT_FILE", "--footer-prompt=FOOTER_PROMPT_FILE", "Load footer prompt from FOOTER_PROMPT_FILE") do |footer_prompt_file|
           @footer_prompt_file_path = footer_prompt_file
         end
 

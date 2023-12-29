@@ -1,0 +1,3 @@
+@@ REQUEST
+
+Please follow crystal lang good practices, idioms and conventions. Please analyze code for every .cr file and tell me what we should change or fix (if needed) to improve the code and match the Usage described in README.md

@@ -26,6 +26,8 @@ module CodePreloader
       footer_prompt = ""
       __header_prompt_file_path = @config.header_prompt_file_path
       __footer_prompt_file_path = @config.footer_prompt_file_path
+      __output_file_path = @output_file_path
+      __repository_path_list = @config.repository_path_list
 
       if !__header_prompt_file_path.nil?
         STDERR.puts "Loading header prompt from: #{__header_prompt_file_path}"
@@ -37,13 +39,9 @@ module CodePreloader
         footer_prompt = File.read(__footer_prompt_file_path)
       end
 
-      STDERR.puts "Processing repository: #{@config.repository_path}"
-
-      __output_file_path = @output_file_path
-      __repository_path = @config.repository_path 
 
       abort("@output_file_path should be non-nil here") if __output_file_path.nil?
-      abort("@repository_path should be non-nil here") if __repository_path.nil?
+      abort("@repository_path should be non-empty here") if __repository_path_list.empty?
 
       invalid_output_file = true
       output_file = STDOUT
@@ -55,7 +53,10 @@ module CodePreloader
 
       output_file.puts header_prompt if @config.header_prompt_file_path
 
-      process_repository(__repository_path, output_file)
+      STDERR.puts "Processing repository: #{@config.repository_path_list}"
+      __repository_path_list.each do |repository_path|
+        process_repository(repository_path, output_file)
+      end
 
       output_file.puts footer_prompt if @config.footer_prompt_file_path
 
@@ -69,19 +70,16 @@ module CodePreloader
 
     # Processes the specified repository and writes the output to a file.
     def process_repository(repository_path : String, output_file : IO::FileDescriptor)
-      process_directory(repository_path, output_file)
+      process_directory(repository_path, repository_path, output_file)
 
     rescue e : IO::Error
       STDERR.puts "Error processing repository: #{e.message}"
       exit(1)
     end
 
-    private def process_directory(path : String, output_file : IO::FileDescriptor)
-      __repository_path = @config.repository_path
-      abort("@repository_path should be non-nil here") if __repository_path.nil?
-
-      Dir.each_child(path) do |child|
-        child_path = File.join(path, child)
+    private def process_directory(root_path, dir_path : String, output_file : IO::FileDescriptor)
+      Dir.each_child(dir_path) do |child|
+        child_path = File.join(dir_path, child)
 
         ignores = (
           @config.ignore_list
@@ -91,20 +89,17 @@ module CodePreloader
         next if !ignores.empty?
         
         STDERR.puts "File: #{child_path}"
-        child_path = File.join(path, child)
+        child_path = File.join(dir_path, child)
         if File.directory?(child_path)
-          process_directory(child_path, output_file)
+          process_directory(root_path, child_path, output_file)
         else
-          process_file(child_path, output_file)
+          process_file(root_path, child_path, output_file)
         end
       end
     end
 
-    private def process_file(file_path : String, output_file : IO::FileDescriptor)
-      __repository_path = @config.repository_path
-      abort("@repository_path should be non-nil here") if __repository_path.nil?
-
-      relative_file_path = file_path.sub(/^#{Regex.escape(__repository_path)}/, ".").lstrip
+    private def process_file(root_path : String, file_path : String, output_file : IO::FileDescriptor)
+      relative_file_path = file_path.sub(/^#{Regex.escape(root_path)}/, ".").lstrip
       output_file.puts "@@ File \"#{relative_file_path}\""
       output_file.puts ""
       output_file.puts(File.read(file_path))

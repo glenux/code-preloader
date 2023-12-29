@@ -1,0 +1,16 @@
+---
+
+ignore_list:
+  - .git
+  - .code_preloader.yml
+  - bin
+  - LICENSE
+  - prompts
+
+output_file_path: null
+
+header_prompt_file_path: null
+
+footer_prompt_file_path: prompts/footer.txt
+
+#

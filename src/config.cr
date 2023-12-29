@@ -1,9 +1,11 @@
 require "option_parser"
 require "yaml"
 
+require "./models/root_config"
+
 module CodePreloader
   class Config
-    property repository_path : String?
+    property repository_path_list : Array(String) = [] of String
     property ignore_list : Array(String) = [] of String
     property output_file_path : String?
     property header_prompt_file_path : String?
@@ -14,7 +16,7 @@ module CodePreloader
 
     def parse_arguments(args : Array(String))
       OptionParser.parse(args) do |parser|
-        parser.banner = "Usage: code-preloader [options] ROOT_DIR"
+        parser.banner = "Usage: code-preloader [options] DIR1 ..."
 
         parser.on("-c CONFIG_FILE", "--config=CONFIG_FILE", "Load parameters from CONFIG_FILE") do |config_file|
           load_config(config_file)
@@ -42,10 +44,9 @@ module CodePreloader
         end
 
         parser.unknown_args do |remaining_args, _|
-          if remaining_args.size > 1
-            abort("Invalid number of arguments. Expected exactly one argument for ROOT_DIR.")
+          remaining_args.each do |arg|
+            @repository_path_list << arg
           end
-          @repository_path = remaining_args[0]
         end
       end
 
@@ -67,17 +68,15 @@ module CodePreloader
     end
 
     private def load_config(config_file_path : String)
-      config_data = YAML.parse(File.read(config_file_path)).as_h
+      config_str = File.read(config_file_path)
 
-      @repository_path = config_data["repository_path"]?.try &.as_s || @repository_path
+      root = Models::RootConfig.from_yaml(config_str)
 
-      if ignore_list_yaml = config_data["ignore_list"]?
-        @ignore_list = ignore_list_yaml.as_a.map(&.as_s)
-      end
-
-      @output_file_path = config_data["output_file_path"]?.try &.as_s || @output_file_path
-      @header_prompt_file_path = config_data["header_prompt_file_path"]?.try &.as_s || @header_prompt_file_path
-      @footer_prompt_file_path = config_data["footer_prompt_file_path"]?.try &.as_s || @footer_prompt_file_path
+      @repository_path = root.repository_path_list || @repository_path_list
+      @ignore_list = root.ignore_list || @ignore_list
+      @output_file_path = root.output_file_path || @output_file_path
+      @header_prompt_file_path = root.header_prompt_file_path || @header_prompt_file_path
+      @footer_prompt_file_path = root.footer_prompt_file_path || @footer_prompt_file_path
 
     rescue ex
       STDERR.puts "Failed to load config file: #{ex.message}"

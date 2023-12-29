@@ -24,7 +24,7 @@ the nature of interactions with ChatGPT.
 To get started with Code-Preloader, ensure that you have Crystal language installed on your system. Follow these steps to install:
 
 ```bash
-git clone https://github.com/your-repository/code-preloader.git
+git clone https://code.apps.glenux.net/glenux/chatgpt-preloader
 cd code-preloader
 shards install
 shards build
@@ -36,16 +36,17 @@ Run Code-Preloader with the following command-line options:
 
 ```
 Usage: code-preloader [options] ROOT_DIR
-
-Options:
-  -c, --config=CONFIG_FILE              Load parameters from CONFIG_FILE (not implemented yet)
-  -i, --ignore=IGNORE_FILE              Ignore file or directory path
-  -o, --output=OUTPUT_FILE              Write output to OUTPUT_FILE (default to stdout)
-  --header-prompt=HEADER_PROMPT_FILE     Load header prompt from PROMPT_FILE
-  --footer-prompt=FOOTER_PROMPT_FILE    Load footer prompt from PROMPT_FILE
-  --version                             Show version
-  -v, --verbose                         Enable verbose mode
-  -h, --help                            Show this help
+    -c CONFIG_FILE, --config=CONFIG_FILE
+                                     Load parameters from CONFIG_FILE
+    -i IGNORE_PATH, --ignore=IGNORE_PATH
+                                     Ignore file or directory
+    -o OUTPUT_FILE, --output=OUTPUT_FILE
+                                     Write output to OUTPUT_FILE
+    -H HEADER_PROMPT_FILE, --header-prompt=HEADER_PROMPT_FILE
+                                     Load header prompt from HEADER_PROMPT_FILE
+    -F FOOTER_PROMPT_FILE, --footer-prompt=FOOTER_PROMPT_FILE
+                                     Load footer prompt from FOOTER_PROMPT_FILE
+    -h, --help                       Show this help
 ```
 
 ### Examples

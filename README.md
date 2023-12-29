@@ -1,10 +1,11 @@
 # Code-Preloader for ChatGPT
 
-Welcome to Code-Preloader, a tool designed to enhance the efficiency of ChatGPT
-by preloading all files within a specified root directory and concatenating
-them into a single file. This tool is particularly useful for preparing smaller
-codebases for processing by ChatGPT, as it allows for the inclusion of
-customized prompts through header and footer files.
+Code-Preloader is a specialized tool designed to streamline the process of
+working with ChatGPT on coding projects. It preloads and concatenates files
+from a specified directory, allowing for the seamless integration of customized
+prompts. This tool is ideal for those who seek an alternative to tools like
+GitHub Copilot, enabling a more efficient and tailored interaction with
+ChatGPT.
 
 ## Features
 
@@ -14,8 +15,9 @@ customized prompts through header and footer files.
 
 ## Limitations
 
-**Note:** Code-Preloader is only suitable for smaller codebas. ChatGPT may not
-perform as expected with large code repositories.
+**Note:** Note: This tool is optimized for smaller codebases. For larger
+repositories, performance may not be optimal due to processing constraints and
+the nature of interactions with ChatGPT.
 
 ## Installation
 
@@ -48,12 +50,16 @@ Options:
 
 ### Examples
 
+#### Basic Use Case
+
 To preload all files in the `src` directory and output to `result.txt`, while
 ignoring the `git` the `bin` directory, and the result file itself:
 
 ```bash
 ./bin/code-preloader -o result.txt -i .git -i result.txt -i bin/ src
 ```
+
+#### Advanced Use Case
 
 To preload all files in the `src` directory and output to clipboard, prepending
 and appending prompts, while ignoring the `git` the `bin` directory, and the
@@ -87,5 +93,10 @@ information.
 
 ## Acknowledgments
 
-- Special thanks to all contributors and users of this project!
+* A special thanks to all contributors and users of this project for their valuable feedback and support.
+* Inspired by the community's need for efficient code preparation tools in the context of AI-assisted programming.
+
+## Related projects
+
+* [mpoon/gpt-repository-loader](https://github.com/mpoon/gpt-repository-loader)
 

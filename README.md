@@ -76,6 +76,34 @@ result file itself:
     | xclip -selection clipboard -i
 ```
 
+#### Advanced with configuration file
+
+You can also do the same by storing all parameters within a configuration file
+(ex: `code_preloader.yml`).
+
+```
+---
+
+ignore_list:
+  - .git
+  - .code_preloader.yml
+  - bin
+  - prompts
+
+output_file_path: result.txt
+
+header_prompt_file_path: prompts/header-context.txt
+
+footer_prompt_file_path: prompts/footer-write-readme.txt
+```
+
+Then type
+
+```bash
+./bin/code-preloader src | xclip -selection clipboard -i
+```
+
+
 ## Contributing
 
 Contributions are what make the open-source community such an amazing place to

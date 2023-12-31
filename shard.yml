@@ -9,16 +9,15 @@ targets:
 authors:
   - Glenn Y. Rolland <glenux@glenux.net>
 
+dependencies:
+  magic:
+    github: dscottboggs/magic.cr
+
 # description: |
 #   Short description of chatgpt-preloader
-
-# dependencies:
-#   pg:
-#     github: will/crystal-pg
-#     version: "~> 0.5"
 
 # development_dependencies:
 #   webmock:
 #     github: manastech/webmock.cr
 
-# license: MIT
+license: LGPL-3.0-or-later

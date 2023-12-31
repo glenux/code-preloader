@@ -54,7 +54,7 @@ module CodePreloader
     end
 
     private def validate_arguments
-      abort("Missing repository path.") if @repository_path.nil? || @repository_path.try(&.empty?)
+      abort("Missing repository path.") if @repository_path_list.empty?
       abort("Missing repository path.") if 
       STDERR.puts("Output file path not specified (using STDOUT)") if @output_file_path.nil? || @output_file_path.try(&.empty?)
     end

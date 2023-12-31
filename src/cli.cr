@@ -3,6 +3,7 @@
 
 require "file"
 require "option_parser"
+require "magic"
 
 require "./config"
 
@@ -100,10 +101,13 @@ module CodePreloader
 
     private def process_file(root_path : String, file_path : String, output_file : IO::FileDescriptor)
       relative_file_path = file_path.sub(/^#{Regex.escape(root_path)}/, ".").lstrip
-      output_file.puts "@@ File \"#{relative_file_path}\""
+      fh = File.open(file_path)
+      mime = Magic.mime_type.of(fh)
+      output_file.puts "@@ File \"#{relative_file_path}\" (Mime-Type: #{mime.inspect})"
       output_file.puts ""
-      output_file.puts(File.read(file_path))
+      output_file.puts(fh.gets_to_end)
       output_file.puts ""
+      fh.close
     end
   end
 end

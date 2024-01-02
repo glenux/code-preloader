@@ -1,11 +1,14 @@
 ---
 
 ignore_list:
-  - .git
-  - .code_preloader.yml
-  - bin
+  - ^\./.git/
+  - ^\./misc/.*
+  - ^\./bin
+  - ^\./lib
+  - ^\./misc
   - LICENSE
   - prompts
+  - Makefile
 
 output_file_path: null
 

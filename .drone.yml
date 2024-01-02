@@ -1,0 +1,95 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: build:binary
+    image: crystallang/crystal:1.10.1-alpine
+    environment:
+      PACKAGE_BASENAME: code-preloader_linux_amd64
+    volumes:
+      - name: cache
+        path: /_cache
+    commands:
+      - pwd
+        # - |
+        #   apt-get update && \
+        #   apt-get install -y \
+        #     cmake g++ \
+        #     libevent-dev libpcre3-dev \
+        #     libyaml-dev liblzma-dev
+      - shards install
+      - shards build --production --static
+      - strip bin/code-preloader
+      - ./bin/code-preloader --version
+      - mkdir -p /_cache/bin
+      - cp -r bin/code-preloader /_cache/bin/$PACKAGE_BASENAME
+
+  - name: publish:tag
+    image: alpine
+    environment:
+      PACKAGE_UPLOAD_URL: https://code.apps.glenux.net/api/v1/packages/glenux/generic/code-preloader
+      RELEASES_URL: https://code.apps.glenux.net/api/v1/repos/glenux/code-preloader/releases
+      PACKAGE_BASENAME: code-preloader_linux_amd64
+      RELEASE_UPLOAD_TOKEN:
+        from_secret: RELEASE_UPLOAD_TOKEN
+      PACKAGE_UPLOAD_TOKEN:
+        from_secret: PACKAGE_UPLOAD_TOKEN
+    when:
+      ref:
+        include:
+          - refs/tags/**
+    volumes:
+      - name: cache
+        path: /_cache
+    commands:
+      - apk add --update --no-cache curl jq
+      - env |grep DRONE
+      - |
+        curl -H "Authorization: token $PACKAGE_UPLOAD_TOKEN" \
+           --upload-file "/_cache/bin/$PACKAGE_BASENAME" \
+           "$PACKAGE_UPLOAD_URL/$DRONE_TAG/$PACKAGE_BASENAME"
+      - |
+        set -x
+        curl -X POST \
+          -H "Authorization: token $RELEASE_UPLOAD_TOKEN" \
+          -H 'accept: application/json' \
+          -H 'Content-Type: application/json' \
+          -d "{\"body\": \"DRAFT\", \"draft\": true, \"name\": \"$DRONE_TAG - DRAFT\", \"prerelease\": false, \"tag_name\": \"$DRONE_TAG\",  \"target_commitish\": \"$DRONE_COMMIT_SHA\"}" \
+          "$RELEASES_URL"
+      - |
+        curl -X 'GET' \
+          -H 'accept: application/json' \
+          "$RELEASES_URL/tags/$DRONE_TAG"
+      - |
+        TAG_ID="$(curl -X 'GET' \
+          -H 'accept: application/json' \
+          "$RELEASES_URL/tags/$DRONE_TAG" | jq -r .id)"
+        echo "TAG_ID=$TAG_ID"
+      - |
+        set -x
+        curl -X POST \
+           -H "Authorization: token $RELEASE_UPLOAD_TOKEN" \
+           -H "accept: application/json" \
+           -H "Content-Type: multipart/form-data" \
+           -F "attachment=@/_cache/bin/$PACKAGE_BASENAME" \
+           "$RELEASES_URL/$TAG_ID/assets?name=$PACKAGE_BASENAME"
+
+
+# FIXME: handle multi-arch
+# FIXME: publish only on tags
+services:
+  - name: docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+
+volumes:
+  - name: cache
+    temp: {}
+  - name: dockersock
+    temp: {}
+#

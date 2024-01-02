@@ -12,6 +12,8 @@ authors:
 dependencies:
   magic:
     github: dscottboggs/magic.cr
+  walk:
+    github: alexherbo2/walk.cr
 
 # description: |
 #   Short description of chatgpt-preloader

@@ -19,15 +19,43 @@ ChatGPT.
 repositories, performance may not be optimal due to processing constraints and
 the nature of interactions with ChatGPT.
 
-## Installation
+## Prerequisites
 
-To get started with Code-Preloader, ensure that you have Crystal language installed on your system. Follow these steps to install:
+Before installing and using Code-Preloader, make sure your system meets the
+following requirements:
+
+1. **Crystal Language**: Code-Preloader is written in Crystal. Ensure you have
+   the Crystal programming language installed on your system. For installation
+   instructions, refer to the [official Crystal language
+   website](https://crystal-lang.org/install/).
+
+2. **Required Libraries**: The following libraries are necessary for the proper
+   functioning of Code-Preloader:
+   * `libevent`: Used for asynchronous event notification.
+   * `libyaml`: Required for YAML parsing.
+   * `libmagic`: Utilized for file type detection.
+   * `make`: Used to define compilation rules
+
+On a Debian-based system, you can install these libraries using the following
+command:
 
 ```bash
-git clone https://code.apps.glenux.net/glenux/chatgpt-preloader
+sudo apt-get install libevent-dev libyaml-dev libmagic-dev make
+```
+
+## Installation
+
+To get started with Code-Preloader, ensure that you have the prerequisites
+installed on your system (see above).
+
+Then follow these steps to install:
+
+```bash
+git clone https://code.apps.glenux.net/glenux/code-preloader
 cd code-preloader
-shards install
-shards build
+make prepare
+make build
+make install
 ```
 
 ## Usage

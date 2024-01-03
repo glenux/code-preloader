@@ -16,7 +16,6 @@ test:
 install:
 	install \
 		-m 755 \
-		-o root \
 		bin/code-preloader \
 		$(PREFIX)/bin
 

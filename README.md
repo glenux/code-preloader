@@ -112,8 +112,10 @@ result file itself:
     --header-prompt prompts/header-context.txt \
     --footer-prompt prompts/footer-write-readme.txt \
     src \
-    | xclip -selection clipboard -i
+    | ctrlc
 ```
+
+__Note__ `ctrlc` is my alias to `xclip -selection clipboard -i`
 
 #### Advanced with configuration file
 
@@ -124,7 +126,7 @@ You can also do the same by storing all parameters within a configuration file
 ---
 ignore_list:
   - .git
-  - .code_preloader.yml
+  - code_preloader.yml
   - bin
   - prompts
 
@@ -136,9 +138,10 @@ footer_prompt_file_path: prompts/footer-write-readme.txt
 Then type
 
 ```bash
-./bin/code-preloader src | xclip -selection clipboard -i
+./bin/code-preloader -c code_preloader.yml src | ctrlc
 ```
 
+__Note__ `ctrlc` is my alias to `xclip -selection clipboard -i`
 
 ## Contributing
 

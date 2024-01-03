@@ -9,26 +9,29 @@
 ![License LGPL3.0-or-later](https://img.shields.io/badge/license-LGPL3.0--or--later-blue.svg)
 [![Donate on patreon](https://img.shields.io/badge/patreon-donate-orange.svg)](https://patreon.com/glenux)
 
-# Code-Preloader for ChatGPT
+# Code-Preloader
 
 Code-Preloader is a specialized tool designed to streamline the process of
-working with ChatGPT on coding projects. It preloads and concatenates files
-from a specified directory, allowing for the seamless integration of customized
-prompts. This tool is ideal for those who seek an alternative to tools like
-GitHub Copilot, enabling a more efficient and tailored interaction with
-ChatGPT.
+working on coding projects with interactive large language models (LLM) like
+ChatGPT, Claude, Mixtral 8x7B, etc. 
+
+It preloads and concatenates files from a specified directory, allowing for the
+seamless integration of customized prompts. 
+
+This tool is ideal for those who seek an alternative to tools like GitHub
+Copilot, enabling a tailored interaction with your favorite LLM.
 
 ## Features
 
 * Preload and concatenate files from a given directory.
-* Customizable header and footer prompts for ChatGPT.
+* Customizable header and footer prompts for your LLM.
 * Simple command-line interface for easy operation.
 
 ## Limitations
 
 **Note:** This tool is optimized for smaller codebases. For larger
 repositories, performance may not be optimal due to processing constraints and
-the nature of interactions with ChatGPT.
+the nature of interactions with LLMs.
 
 ## Prerequisites
 

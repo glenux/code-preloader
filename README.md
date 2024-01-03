@@ -77,8 +77,8 @@ Run Code-Preloader with the following command-line options:
 Usage: code-preloader [options] ROOT_DIR
     -c CONFIG_FILE, --config=CONFIG_FILE
                                      Load parameters from CONFIG_FILE
-    -i IGNORE_PATH, --ignore=IGNORE_PATH
-                                     Ignore file or directory
+    -i REGEX, --ignore=REGEX
+                                     Ignore file or directory matching REGEX
     -o OUTPUT_FILE, --output=OUTPUT_FILE
                                      Write output to OUTPUT_FILE
     -H HEADER_PROMPT_FILE, --header-prompt=HEADER_PROMPT_FILE

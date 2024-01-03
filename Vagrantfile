@@ -30,5 +30,5 @@ Vagrant.configure('2') do |config|
     machine.vm.network 'forwarded_port', guest: 80, host: 1080, host_ip: '127.0.0.1'
   end
 
-  config.vm.provision 'shell', path: 'scripts/vagrant-provision/base.sh'
+  config.vm.provision 'shell', path: 'misc/vagrant-provision/base.sh'
 end

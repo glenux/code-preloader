@@ -9,6 +9,10 @@
 ![License LGPL3.0-or-later](https://img.shields.io/badge/license-LGPL3.0--or--later-blue.svg)
 [![Donate on patreon](https://img.shields.io/badge/patreon-donate-orange.svg)](https://patreon.com/glenux)
 
+> :information_source: The GitHub page is a secondary mirror. For the latest
+> updates and comprehensive version of our project, please visit our primary
+> repository at: <https://code.apps.glenux.net/glenux/code-preloader>. 
+
 # Code-Preloader
 
 Code-Preloader is a specialized tool designed to streamline the process of

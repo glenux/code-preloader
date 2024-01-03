@@ -13,17 +13,17 @@ steps:
         path: /_cache
     commands:
       - pwd
-        # - |
-        #   apt-get update && \
-        #   apt-get install -y \
-        #     cmake g++ \
-        #     libevent-dev libpcre3-dev \
-        #     libyaml-dev liblzma-dev
-      - apk add --update file-dev
+      # Upgrade alpine to 3.19
+      - sed -i -e 's,alpine/v3.17,alpine/v3.19,' /etc/apk/repositories
+      - apk upgrade --available && sync
+      # Build
+      - apk add --update file-dev libmagic-static
       - shards install
       - shards build --production --static
       - strip bin/code-preloader
+      # Verify
       - ./bin/code-preloader --version
+      # Cache
       - mkdir -p /_cache/bin
       - cp -r bin/code-preloader /_cache/bin/$PACKAGE_BASENAME
 

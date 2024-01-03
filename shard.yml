@@ -14,6 +14,8 @@ dependencies:
     github: dscottboggs/magic.cr
   walk:
     github: alexherbo2/walk.cr
+  version_from_shard:
+    github: hugopl/version_from_shard
 
 # description: |
 #   Short description of chatgpt-preloader

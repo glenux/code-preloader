@@ -2,6 +2,7 @@ require "option_parser"
 require "yaml"
 
 require "./models/root_config"
+require "./version"
 
 module CodePreloader
   class Config
@@ -56,6 +57,11 @@ module CodePreloader
           "Load footer prompt from FOOTER_PROMPT_FILE"
         ) do |footer_prompt_file|
           @footer_prompt_file_path = footer_prompt_file
+        end
+
+        parser.on("--version", "Show version") do
+          STDOUT.puts "#{PROGRAM_NAME} #{VERSION}"
+          exit(0)
         end
 
         parser.on("-h", "--help", "Show this help") do

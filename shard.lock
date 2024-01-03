@@ -4,6 +4,10 @@ shards:
     git: https://github.com/dscottboggs/magic.cr.git
     version: 1.1.0
 
+  version_from_shard:
+    git: https://github.com/hugopl/version_from_shard.git
+    version: 1.2.5
+
   walk:
     git: https://github.com/alexherbo2/walk.cr.git
     version: 0.1.0+git.commit.765d758c0f966cccc98c1d81c7ccd0c1f71928e3

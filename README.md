@@ -74,17 +74,16 @@ make install
 Run Code-Preloader with the following command-line options:
 
 ```
-Usage: code-preloader [options] ROOT_DIR
-    -c CONFIG_FILE, --config=CONFIG_FILE
-                                     Load parameters from CONFIG_FILE
-    -i REGEX, --ignore=REGEX
-                                     Ignore file or directory matching REGEX
-    -o OUTPUT_FILE, --output=OUTPUT_FILE
-                                     Write output to OUTPUT_FILE
-    -H HEADER_PROMPT_FILE, --header-prompt=HEADER_PROMPT_FILE
-                                     Load header prompt from HEADER_PROMPT_FILE
-    -F FOOTER_PROMPT_FILE, --footer-prompt=FOOTER_PROMPT_FILE
-                                     Load footer prompt from FOOTER_PROMPT_FILE
+CodePreloader v0.1.0
+Usage: code-preloader [options] DIR ...
+
+Options:
+    -c FILE, --config=FILE           Load parameters from FILE
+    -i REGEXP, --ignore=REGEXP       Ignore file or directory
+    -o FILE, --output=FILE           Write output to FILE
+    -H FILE, --header-prompt=FILE    Load header prompt from FILE
+    -F FILE, --footer-prompt=FILE    Load footer prompt from FILE
+    --version                        Show version
     -h, --help                       Show this help
 ```
 

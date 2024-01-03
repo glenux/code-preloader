@@ -17,44 +17,48 @@ module CodePreloader
 
     def parse_arguments(args : Array(String))
       OptionParser.parse(args) do |parser|
-        parser.banner = "Usage: code-preloader [options] DIR1 ..."
+        parser.banner = [
+          "#{PROGRAM_NAME} v#{VERSION}",
+          "Usage: code-preloader [options] DIR ...\n",
+          "Options:"
+        ].join("\n")
 
         parser.on(
-          "-c CONFIG_FILE", 
-          "--config=CONFIG_FILE", 
-          "Load parameters from CONFIG_FILE"
+          "-c FILE", 
+          "--config=FILE", 
+          "Load parameters from FILE"
         ) do |config_file|
           load_config(config_file)
         end
 
         parser.on(
-          "-i IGNORE_PATH", 
-          "--ignore=IGNORE_PATH", 
+          "-i REGEXP", 
+          "--ignore=REGEXP", 
           "Ignore file or directory"
         ) do |ignore_file|
           @ignore_list << ignore_file
         end
 
         parser.on(
-          "-o OUTPUT_FILE", 
-          "--output=OUTPUT_FILE", 
-          "Write output to OUTPUT_FILE"
+          "-o FILE", 
+          "--output=FILE", 
+          "Write output to FILE"
         ) do |output_file|
           @output_file_path = output_file
         end
 
         parser.on(
-          "-H HEADER_PROMPT_FILE", 
-          "--header-prompt=HEADER_PROMPT_FILE", 
-          "Load header prompt from HEADER_PROMPT_FILE"
+          "-H FILE", 
+          "--header-prompt=FILE", 
+          "Load header prompt from FILE"
         ) do |header_prompt_file|
           @header_prompt_file_path = header_prompt_file
         end
 
         parser.on(
-          "-F FOOTER_PROMPT_FILE", 
-          "--footer-prompt=FOOTER_PROMPT_FILE", 
-          "Load footer prompt from FOOTER_PROMPT_FILE"
+          "-F FILE", 
+          "--footer-prompt=FILE", 
+          "Load footer prompt from FILE"
         ) do |footer_prompt_file|
           @footer_prompt_file_path = footer_prompt_file
         end

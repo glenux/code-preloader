@@ -1,0 +1,19 @@
+---
+
+ignore_list:
+  - ^\./.git/
+  - ^\./misc/.*
+  - ^\./bin
+  - ^\./lib
+  - ^\./misc
+  - LICENSE
+  - prompts
+  - Makefile
+
+output_file_path: null
+
+header_prompt_file_path: null
+
+footer_prompt_file_path: prompts/footer.txt
+
+#

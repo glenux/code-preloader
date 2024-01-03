@@ -1,3 +1,14 @@
+<!--
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# SPDX-FileCopyrightText: 2023 Glenn Y. Rolland <glenux@glenux.net>
+# Copyright © 2023 Glenn Y. Rolland <glenux@glenux.net>
+-->
+
+[![Build Status](https://cicd.apps.glenux.net/api/badges/glenux/code-preloader/status.svg)](https://cicd.apps.glenux.net/glenux/code-preloader)
+![License LGPL3.0-or-later](https://img.shields.io/badge/license-LGPL3.0--or--later-blue.svg)
+[![Donate on patreon](https://img.shields.io/badge/patreon-donate-orange.svg)](https://patreon.com/glenux)
+
 # Code-Preloader for ChatGPT
 
 Code-Preloader is a specialized tool designed to streamline the process of

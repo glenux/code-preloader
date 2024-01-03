@@ -9,9 +9,10 @@
 ![License LGPL3.0-or-later](https://img.shields.io/badge/license-LGPL3.0--or--later-blue.svg)
 [![Donate on patreon](https://img.shields.io/badge/patreon-donate-orange.svg)](https://patreon.com/glenux)
 
-> :information_source: The GitHub page is a secondary mirror. For the latest
-> updates and comprehensive version of our project, please visit our primary
-> repository at: <https://code.apps.glenux.net/glenux/code-preloader>. 
+> :information_source: This project is available on our self-hosted server and
+> on CodeBerg and GitHub as mirrors. For the latest updates and comprehensive
+> version of our project, please visit our primary repository at:
+> <https://code.apps.glenux.net/glenux/code-preloader>. 
 
 # Code-Preloader
 

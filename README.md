@@ -26,7 +26,7 @@ ChatGPT.
 
 ## Limitations
 
-**Note:** Note: This tool is optimized for smaller codebases. For larger
+**Note:** This tool is optimized for smaller codebases. For larger
 repositories, performance may not be optimal due to processing constraints and
 the nature of interactions with ChatGPT.
 
@@ -120,9 +120,8 @@ result file itself:
 You can also do the same by storing all parameters within a configuration file
 (ex: `code_preloader.yml`).
 
-```
+```yaml
 ---
-
 ignore_list:
   - .git
   - .code_preloader.yml
@@ -130,9 +129,7 @@ ignore_list:
   - prompts
 
 output_file_path: result.txt
-
 header_prompt_file_path: prompts/header-context.txt
-
 footer_prompt_file_path: prompts/footer-write-readme.txt
 ```
 

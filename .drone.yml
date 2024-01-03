@@ -19,7 +19,7 @@ steps:
         #     cmake g++ \
         #     libevent-dev libpcre3-dev \
         #     libyaml-dev liblzma-dev
-      - apk add --update libmagic
+      - apk add --update file-dev
       - shards install
       - shards build --production --static
       - strip bin/code-preloader

@@ -107,10 +107,9 @@ result file itself:
 
 ```bash
 ./bin/code-preloader \
-    -o result.txt \
     -i .git -i bin/ -i result.txt -i prompts \
-    --header-prompt prompts/header-context.txt \
-    --footer-prompt prompts/footer-write-readme.txt \
+    -H prompts/header-context.txt \
+    -F prompts/footer-write-readme.txt \
     src \
     | ctrlc
 ```
@@ -130,7 +129,7 @@ ignore_list:
   - bin
   - prompts
 
-output_file_path: result.txt
+output_file_path: null
 header_prompt_file_path: prompts/header-context.txt
 footer_prompt_file_path: prompts/footer-write-readme.txt
 ```

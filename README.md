@@ -108,8 +108,7 @@ result file itself:
 ```bash
 ./bin/code-preloader \
     -i .git -i bin/ -i result.txt -i prompts \
-    -H prompts/header-context.txt \
-    -F prompts/footer-write-readme.txt \
+    -H prompts/context.txt -F prompts/request-readme.txt \
     src \
     | ctrlc
 ```
@@ -130,8 +129,8 @@ ignore_list:
   - prompts
 
 output_file_path: null
-header_prompt_file_path: prompts/header-context.txt
-footer_prompt_file_path: prompts/footer-write-readme.txt
+header_prompt_file_path: prompts/context.txt
+footer_prompt_file_path: prompts/request-readme.txt
 ```
 
 Then type

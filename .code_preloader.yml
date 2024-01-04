@@ -1,15 +1,15 @@
 ---
 
 ignore_list:
-  - ^\./\.git/.*
-  - ^\./\.vagrant/.*
-  - ^\./misc/.*
-  - ^\./bin/.*
-  - ^\./lib/.*
-  - ^\./misc/.*
-  - ^\./prompts/.*
-  - ^\./LICENSE
-  - ^\./Makefile
+  - ^\.git/.*
+  - ^\.vagrant/.*
+  - ^misc/.*
+  - ^bin/.*
+  - ^lib/.*
+  - ^misc/.*
+  - ^prompts/.*
+  - ^LICENSE
+  - ^Makefile
   - .*\.svg$
 
 output_file_path: null

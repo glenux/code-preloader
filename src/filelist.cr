@@ -56,15 +56,16 @@ module CodePreloader
           keep = true
           must_select = false
           must_reject = false
+          clean_path = path.to_s.gsub(/^\.\//,"")
 
           @filters_in.each do |filter_in|
-            must_select = must_select || filter_in.call(path.to_s)
+            must_select = must_select || filter_in.call(clean_path)
           end
           keep = keep && must_select if @filters_in.any?
           keep = keep || is_dir
 
           @filters_out.each do |filter_out|
-            must_reject = must_reject || filter_out.call(path.to_s)
+            must_reject = must_reject || filter_out.call(clean_path)
           end
           keep = keep && !must_reject if @filters_out.any?
 
@@ -72,13 +73,14 @@ module CodePreloader
         end
 
         walker.each do |path|
-          next if File.directory? path
+          clean_path = path.to_s.gsub(/^\.\//,"")
+          next if File.directory? clean_path
 
-          path = File.realpath(path) if File.symlink? path
-          next if seen.includes? path.to_s
+          path = File.realpath(path) if File.symlink? clean_path
+          next if seen.includes? clean_path
 
-          seen << path.to_s
-          yield path.to_s
+          seen << clean_path
+          yield clean_path
         end
       end
     end

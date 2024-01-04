@@ -1,0 +1,21 @@
+---
+# Example configuration for Code-Preloader
+
+# List of repository paths to preload
+# repository_path_list:
+#   - "path/to/repo1"
+#   - "path/to/repo2"
+
+# List of patterns to ignore during preloading
+ignore_list:
+  - complex/ignore1
+  - complex/ignore2
+
+# Path to the output file (if null, output to STDOUT)
+output_file_path: complex_output.txt
+
+# Optional: Path to a file containing the header prompt
+header_prompt_file_path: null
+
+# Optional: Path to a file containing the footer prompt
+footer_prompt_file_path: null

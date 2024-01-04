@@ -1,6 +1,7 @@
 
 # vim: set ts=2 sw=2 et ft=crystal:
 
+require "colorize"
 require "file"
 require "option_parser"
 require "magic"
@@ -56,7 +57,7 @@ module CodePreloader
         "",
         "# List of patterns to ignore during preloading",
         "ignore_list:",
-        "  - \"^\\./\\.git/.*\"",
+        "  - ^\\.git/.*",
         "",
         "# Path to the output file (if null, output to STDOUT)",
         "output_file_path: null",
@@ -99,6 +100,8 @@ module CodePreloader
       header_prompt_file_path = pack_options.header_prompt_file_path
       footer_prompt_file_path = pack_options.footer_prompt_file_path
       regular_output_file = false
+      header_prompt = ""
+      footer_prompt = ""
 
       filelist = FileList.new()
       filelist.add(repository_path_list)
@@ -107,37 +110,37 @@ module CodePreloader
       end
 
       if !header_prompt_file_path.nil?
-        STDERR.puts "Loading header prompt from: #{header_prompt_file_path}"
+        STDERR.puts "Loading header prompt from: #{header_prompt_file_path}".colorize(:yellow)
         header_prompt = File.read(header_prompt_file_path)
       end
 
       if !footer_prompt_file_path.nil?
-        STDERR.puts "Loading footer prompt from: #{footer_prompt_file_path}"
+        STDERR.puts "Loading footer prompt from: #{footer_prompt_file_path}".colorize(:yellow)
         footer_prompt = File.read(footer_prompt_file_path)
       end
 
+      output_file = STDOUT
       output_file_path.try do |path|
         break if path.empty?
         break if path == "-"
         regular_output_file = true
         output_file = File.open(path, "w")
       end
+      STDERR.puts "Writing output to: #{regular_output_file ? output_file_path : "stdout" }".colorize(:yellow)
 
-      output_file = STDOUT
-      header_prompt = ""
-      footer_prompt = ""
 
-      output_file.puts header_prompt if header_prompt_file_path
+      header_prompt_file_path.try { output_file.puts header_prompt }
 
-      STDERR.puts "Processing repository: #{repository_path_list}"
+      STDERR.puts "Processing repository: #{repository_path_list}".colorize(:yellow)
       filelist.each do |file_path|
+        STDERR.puts "Processing file: #{file_path}".colorize(:yellow)
         process_file(file_path, output_file)
       end
 
-      output_file.puts footer_prompt if footer_prompt_file_path
+      footer_prompt_file_path.try { output_file.puts footer_prompt }
 
       output_file.close if regular_output_file
-      STDERR.puts "Processing completed. Output written to: #{regular_output_file ? output_file_path : "stdout" }"
+      STDERR.puts "Processing completed.".colorize(:yellow)
 
     rescue e : Exception
       STDERR.puts "An error occurred during execution: #{e.message}"
@@ -145,13 +148,23 @@ module CodePreloader
     end
 
     private def process_file(file_path : String, output_file : IO::FileDescriptor)
-      fh = File.open(file_path)
-      mime = Magic.mime_type.of(fh)
+      mime = ""
+      clean_content = ""
+      File.open(file_path) do |fh|
+        mime = Magic.mime_type.of(fh)
+        clean_content = (
+          fh.gets_to_end
+          .strip
+          .gsub(/\n\s*\n\s*\n/,"\n\n")
+        )
+      end
+
       output_file.puts "@@ File \"#{file_path}\" (Mime-Type: #{mime.inspect})"
       output_file.puts ""
-      output_file.puts(fh.gets_to_end)
-      output_file.puts ""
-      fh.close
+      if clean_content !~ /^\s*$/
+        output_file.puts(clean_content)
+        output_file.puts ""
+      end
     end
   end
 end

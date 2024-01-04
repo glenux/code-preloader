@@ -207,14 +207,9 @@ module CodePreloader
     end
 
     private def validate_pack
-      abort("No pack options defined!") if @pack_options.nil?
-      @pack_options.try do |opts|
-        abort("Missing repository path.") if opts.repository_path_list.empty?
-
-        if opts.output_file_path.nil? || opts.output_file_path.try(&.empty?)
-          STDERR.puts("Output file path not specified (using STDOUT)") 
-        end
-      end
+      opts = @pack_options
+      abort("No pack options defined!") if opts.nil?
+      abort("Missing repository path.") if opts.repository_path_list.empty?
     end
 
     # Reads and returns a list of paths to ignore from the given file.
@@ -226,17 +221,27 @@ module CodePreloader
     end
 
     private def load_pack_config(config_file_path : String)
-      config_str = File.read(config_file_path)
+      opts = @pack_options
+      abort("FIXME") if opts.nil?
 
+      config_str = File.read(config_file_path)
       root = Models::RootConfig.from_yaml(config_str)
 
-      @pack_options.try do |opts|
-        opts.config_file_path = config_file_path
-        opts.repository_path_list = root.repository_path_list || opts.repository_path_list
-        opts.ignore_list = root.ignore_list || opts.ignore_list
-        opts.output_file_path = root.output_file_path || opts.output_file_path
-        opts.header_prompt_file_path = root.header_prompt_file_path || opts.header_prompt_file_path
-        opts.footer_prompt_file_path = root.footer_prompt_file_path || opts.footer_prompt_file_path
+      opts.config_file_path = config_file_path
+      if opts.repository_path_list.nil? || opts.repository_path_list.try &.empty?
+        root.repository_path_list.try { |value| opts.repository_path_list = value }
+      end
+      if opts.ignore_list.nil? || opts.ignore_list.try &.empty?
+        root.ignore_list.try { |value| opts.ignore_list = value }
+      end
+      if opts.output_file_path.nil?
+        opts.output_file_path = root.output_file_path 
+      end
+      if opts.header_prompt_file_path.nil?
+        root.header_prompt_file_path.try { |value| opts.header_prompt_file_path = value }
+      end
+      if opts.footer_prompt_file_path.nil?
+        root.footer_prompt_file_path.try { |value| opts.footer_prompt_file_path = value }
       end
 
     rescue ex : Exception

@@ -251,8 +251,10 @@ appreciated**.
 
 ## Troubleshooting and Support
 
-If you encounter any issues or need support, please open an issue in the
-project's GitHub issue tracker. We strive to be responsive and helpful.
+If you encounter any issues or need support, please open an issue in [the
+project's issue
+tracker](https://code.apps.glenux.net/glenux/code-preloader/issues). We strive
+to be responsive and helpful.
 
 ## License
 

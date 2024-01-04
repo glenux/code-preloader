@@ -1,5 +1,3 @@
-@@REQUEST
-
 I would like to change CLI parameters structure add add two subcommands:
 * init : which will create an example .code_preloader.yml file (with comments)
 * pack : which will create the packed version of the current directory for LLM prompting

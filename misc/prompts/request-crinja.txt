@@ -1,0 +1,10 @@
+I would like to replace the hardcoded structure of the output "@@ ... " with a jinja template that would be handler with the crinja.cr shard.
+
+My strategy is to preload the content during process_file and store it in a hash.
+Then the hash will be used in the end to render a final template (from crinja).
+
+Can you please tell me :
+* where the changes should occur (which file? which class? which method?)
+* what kind of changes must be made there?
+
+Please do not write code yet, simply explain.

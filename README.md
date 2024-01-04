@@ -178,16 +178,11 @@ The goal is to maximize the effectiveness of your interactions with large
 language models (LLMs) using CodePreloader for software development tasks.
 
 1. **Preload Your Project:** Before starting a new task, ensure you preload your project. This prepares the LLM with the necessary context, making it ready to assist you effectively.
-
-**2. Utilize Structure Separators:** Use "@@" as a delimiter to clearly separate and introduce new content. This could be for final requests, additional files, or other relevant data.
-
-**3. State Your Goals Clearly:** Begin by explicitly informing the LLM of your objectives. A clear and concise explanation of what you aim to achieve helps the model understand your needs better.
-
-**4. Reference Preloaded Files:** If necessary, refer to preloaded files by using "@@ File ...". This directs the LLM's attention to specific parts of your project.
-
-**5. Direct Focus Using Specific Phrasing:** Encourage the LLM to "focus" or "concentrate" on particular elements of the preloaded context, like files, classes, methods, etc. These specific terms have been observed to enhance the model's attention to the relevant details.
-
-**6. Approach the Task in Stages:** Divide your request into multiple stages for clarity and precision:
+2. **Utilize Structure Separators:** Use "@@" as a delimiter to clearly separate and introduce new content. This could be for final requests, additional files, or other relevant data.
+3. **State Your Goals Clearly:** Begin by explicitly informing the LLM of your objectives. A clear and concise explanation of what you aim to achieve helps the model understand your needs better.
+4. **Reference Preloaded Files:** If necessary, refer to preloaded files by using "@@ File ...". This directs the LLM's attention to specific parts of your project.
+5. **Direct Focus Using Specific Phrasing:** Encourage the LLM to "focus" or "concentrate" on particular elements of the preloaded context, like files, classes, methods, etc. These specific terms have been observed to enhance the model's attention to the relevant details.
+6. **Approach the Task in Stages:** Divide your request into multiple stages for clarity and precision:
   * **a. First Request**: Ask the LLM to analyze the content based on your instructions and explain the approach it would take for the changes requested. At this stage, request the LLM to refrain from writing code.
   * **b. Second Request**: Instruct the LLM to focus on both the content and its previous analysis. Request a proposed fixed version of the specific file, class, or method based on the prior analysis. The more detailed your request, the better the outcome. Ask for changes to be made one at a time.
   * **c. Third and Subsequent Requests**: Follow the same pattern as the second request but apply it to different parts of the project that require changes.

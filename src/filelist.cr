@@ -2,10 +2,8 @@
 require "walk"
 
 module CodePreloader
-
   # Manage a list of files
   class FileList 
-
     alias Filter = String -> Bool
 
     class NotADirectory < Exception

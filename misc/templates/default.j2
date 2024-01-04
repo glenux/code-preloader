@@ -1,0 +1,16 @@
+{%- if prompt_header -%}
+@@ CONTEXT
+
+{{ prompt_header }}
+{%- endif -%}
+{%- for file in prompt_files -%}
+@@ FILE "{{ file.path }}" WITH MIME-TYPE "{{ file.mime_type }}"
+
+{{- file.content -}}
+
+{%- endfor -%}
+{%- if prompt_footer -%}
+@@ REQUEST
+
+{{ prompt_footer }}
+{%- endif -%}

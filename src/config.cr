@@ -16,23 +16,30 @@ module CodePreloader
       Version
     end
 
+    class HelpOptions
+      property parser_snapshot : OptionParser? = nil
+    end
+
     class InitOptions
-      property config_file_path : String? = nil
+      property config_path : String? = nil
     end
 
     class PackOptions
-      property config_file_path : String? = nil
-      property repository_path_list : Array(String) = [] of String
+      property config_path : String? = nil
+      property source_list : Array(String) = [] of String
       property ignore_list : Array(String) = [] of String
-      property output_file_path : String?
-      property header_prompt_file_path : String?
-      property footer_prompt_file_path : String?
+      property output_path : String?
+      property prompt_template_path : String?
+      property prompt_header_path : String?
+      property prompt_footer_path : String?
     end
 
+    getter verbose : Bool = false
     getter parser : OptionParser?
-    property subcommand : Subcommand = Subcommand::None
-    property pack_options : PackOptions?
-    property init_options : InitOptions?
+    getter subcommand : Subcommand = Subcommand::None
+    getter pack_options : PackOptions?
+    getter init_options : InitOptions?
+    getter help_options : HelpOptions?
 
     def initialize()
     end
@@ -49,7 +56,7 @@ module CodePreloader
       parser.unknown_args do |remaining_args, _|
         # FIXME: detect and make error if there are more or less than one
         remaining_args.each do |arg|
-          @init_options.try &.config_file_path = arg
+          @init_options.try &.config_path = arg
         end
       end
 
@@ -58,7 +65,7 @@ module CodePreloader
         "--config=FILE", 
         "Load parameters from FILE"
       ) do |config_file|
-        @init_options.try { |opt| opt.config_file_path = config_file }
+        @init_options.try { |opt| opt.config_path = config_file }
       end
 
       parser.separator ""
@@ -79,16 +86,44 @@ module CodePreloader
     def parse_pack_options(parser) 
       @pack_options = PackOptions.new
 
+      config_file = detect_config_file
+      config_file.try { |path| load_pack_config(path) }
+
       parser.banner = [
         "Usage: code-preloader pack [options] DIR ...\n",
         "Global options:"
       ].join("\n")
 
       parser.separator "\nPack options:"
+
+      parser.on(
+        "-c FILE", 
+        "--config=FILE", 
+        "Load parameters from FILE\n(default: \".code_preload.yml\", if present)"
+      ) do |config_file|
+        @pack_options.try { |opt| load_pack_config(config_file) }
+      end
+
+      parser.on(
+        "-F FILE", 
+        "--prompt-footer=FILE", 
+        "Load prompt footer from FILE (default: none)"
+      ) do |prompt_footer_path|
+        @pack_options.try { |opt| opt.prompt_footer_path = prompt_footer_path }
+      end
+
+      parser.on(
+        "-H FILE", 
+        "--prompt-header=FILE", 
+        "Load prompt header from FILE (default: none)"
+      ) do |prompt_header_path|
+        @pack_options.try { |opt| opt.prompt_header_path = prompt_header_path }
+      end
+
       parser.on(
         "-i REGEXP", 
         "--ignore=REGEXP", 
-        "Ignore file or directory"
+        "Ignore file or directory. Can be used\nmultiple times (default: none)"
       ) do |ignore_file|
         @pack_options.try { |opt| opt.ignore_list << ignore_file }
       end
@@ -96,40 +131,24 @@ module CodePreloader
       parser.on(
         "-o FILE", 
         "--output=FILE", 
-        "Write output to FILE"
+        "Write output to FILE (default: \"-\", STDOUT)"
       ) do |output_file|
-        @pack_options.try { |opt| opt.output_file_path = output_file }
+        @pack_options.try { |opt| opt.output_path = output_file }
       end
 
       parser.on(
-        "-H FILE", 
-        "--header-prompt=FILE", 
-        "Load header prompt from FILE"
-      ) do |header_prompt_file|
-        @pack_options.try { |opt| opt.header_prompt_file_path = header_prompt_file }
-      end
-
-      parser.on(
-        "-F FILE", 
-        "--footer-prompt=FILE", 
-        "Load footer prompt from FILE"
-      ) do |footer_prompt_file|
-        @pack_options.try { |opt| opt.footer_prompt_file_path = footer_prompt_file }
-      end
-
-      parser.on(
-        "-c FILE", 
-        "--config=FILE", 
-        "Load parameters from FILE"
-      ) do |config_file|
-        @pack_options.try { |opt| load_pack_config(config_file) }
+        "-t FILE", 
+        "--template=FILE", 
+        "Load template from FILE (default: internal)"
+      ) do |prompt_template_path|
+        @pack_options.try { |opt| opt.prompt_template_path = prompt_template_path }
       end
 
       parser.separator ""
 
       parser.unknown_args do |remaining_args, _|
         remaining_args.each do |arg|
-          @pack_options.try { |opt| opt.repository_path_list << arg }
+          @pack_options.try { |opt| opt.source_list << arg }
         end
       end
 
@@ -153,13 +172,22 @@ module CodePreloader
           "Global options:"
         ].join("\n")
 
+        parser.on("-h", "--help", "Show this help") do
+          @subcommand = Subcommand::Help
+          @help_options = HelpOptions.new
+          @help_options.try do |opts|
+            opts.parser_snapshot = parser.dup
+          end
+        end
+
+        parser.on("-v", "--verbose", "Enable verbose mode") do
+          @verbose = true
+        end
+
         parser.on("--version", "Show version") do
           @subcommand = Subcommand::Version
         end
 
-        parser.on("-h", "--help", "Show this help") do
-          @subcommand = Subcommand::Help
-        end
 
         parser.separator "\nSubcommands:"
 
@@ -187,8 +215,24 @@ module CodePreloader
       validate
     end
 
-    def detect_config
-      # FIXME: detect config name, if any
+    def detect_config_file() : String?
+      home_dir = ENV["HOME"]
+      possible_files = [
+        File.join(".code_preloader.yaml"),
+        File.join(".code_preloader.yml"),
+        File.join(home_dir, ".config", "code_preloader", "config.yaml"),
+        File.join(home_dir, ".config", "code_preloader", "config.yml"),
+        File.join(home_dir, ".config", "code_preloader.yaml"),
+        File.join(home_dir, ".config", "code_preloader.yml"),
+        File.join("/etc", "code_preloader", "config.yaml"),
+        File.join("/etc", "code_preloader", "config.yml"),
+      ]
+
+      possible_files.each do |file_path|
+        return file_path if File.exists?(file_path)
+      end
+
+      return nil
     end
 
     private def validate
@@ -209,39 +253,42 @@ module CodePreloader
     private def validate_pack
       opts = @pack_options
       abort("No pack options defined!") if opts.nil?
-      abort("Missing repository path.") if opts.repository_path_list.empty?
+      abort("Missing repository path.") if opts.source_list.empty?
     end
 
     # Reads and returns a list of paths to ignore from the given file.
-    def self.get_ignore_list(ignore_file_path : String) : Array(String)
-      File.exists?(ignore_file_path) ? File.read_lines(ignore_file_path).map(&.strip) : [] of String
+    def self.get_ignore_list(ignore_path : String) : Array(String)
+      File.exists?(ignore_path) ? File.read_lines(ignore_path).map(&.strip) : [] of String
     rescue e : IO::Error
       STDERR.puts "Error reading ignore file: #{e.message}"
       exit(1)
     end
 
-    private def load_pack_config(config_file_path : String)
+    private def load_pack_config(config_path : String)
       opts = @pack_options
-      abort("FIXME") if opts.nil?
+      abort("No pack options defined!") if opts.nil?
 
-      config_str = File.read(config_file_path)
+      config_str = File.read(config_path)
       root = Models::RootConfig.from_yaml(config_str)
 
-      opts.config_file_path = config_file_path
-      if opts.repository_path_list.nil? || opts.repository_path_list.try &.empty?
-        root.repository_path_list.try { |value| opts.repository_path_list = value }
+      opts.config_path = config_path
+      if opts.source_list.nil? || opts.source_list.try &.empty?
+        root.source_list.try { |value| opts.source_list = value }
       end
       if opts.ignore_list.nil? || opts.ignore_list.try &.empty?
         root.ignore_list.try { |value| opts.ignore_list = value }
       end
-      if opts.output_file_path.nil?
-        opts.output_file_path = root.output_file_path 
+      if opts.output_path.nil?
+        opts.output_path = root.output_path 
       end
-      if opts.header_prompt_file_path.nil?
-        root.header_prompt_file_path.try { |value| opts.header_prompt_file_path = value }
+      if opts.prompt_header_path.nil?
+        root.prompt.try &.header_path.try { |value| opts.prompt_header_path = value }
       end
-      if opts.footer_prompt_file_path.nil?
-        root.footer_prompt_file_path.try { |value| opts.footer_prompt_file_path = value }
+      if opts.prompt_footer_path.nil?
+        root.prompt.try &.footer_path.try { |value| opts.prompt_footer_path = value }
+      end
+      if opts.prompt_template_path.nil?
+        root.prompt.try &.template_path.try { |value| opts.prompt_template_path = value }
       end
 
     rescue ex : Exception

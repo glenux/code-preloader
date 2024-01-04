@@ -12,10 +12,10 @@ ignore_list:
   - ^Makefile
   - .*\.svg$
 
-output_file_path: null
+output_path: null
 
-header_prompt_file_path: null
-
-footer_prompt_file_path: null
-
+prompt:
+  header_path: null
+  footer_path: null
+  template_path: misc/templates/default.j2
 #

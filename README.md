@@ -121,7 +121,8 @@ result file itself:
     | ctrlc
 ```
 
-__Note__ `ctrlc` is my alias to `xclip -selection clipboard -i`
+__Note:__ the command `ctrlc` in previous command is an alias to `xclip
+-selection clipboard -i`
 
 ### Using a config file
 
@@ -141,7 +142,12 @@ Init options:
 
 #### Example: Advanced with configuration file
 
-Given the following configuration file (ex: `code_preloader.yml`).
+Create an empty configuration file with
+
+```bash
+./bin/code-preloader init -c .code_preloader.yml
+```
+Adapt the configuration file (`.code_preloader.yml`) to your needs:
 
 ```yaml
 ---
@@ -156,13 +162,14 @@ header_prompt_file_path: prompts/context.txt
 footer_prompt_file_path: prompts/request-readme.txt
 ```
 
-You can type a shorter command like:
+Then you can type a shorter command like:
 
 ```bash
-./bin/code-preloader -c code_preloader.yml src | ctrlc
+./bin/code-preloader pack -c .code_preloader.yml src | ctrlc
 ```
 
-__Note__ `ctrlc` is my alias to `xclip -selection clipboard -i`
+__Note:__ the command `ctrlc` in previous command is an alias to `xclip
+-selection clipboard -i`
 
 ## Contributing
 

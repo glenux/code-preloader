@@ -10,6 +10,8 @@ authors:
   - Glenn Y. Rolland <glenux@glenux.net>
 
 dependencies:
+  crinja:
+    github: straight-shoota/crinja
   magic:
     github: dscottboggs/magic.cr
   walk:

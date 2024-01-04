@@ -19,13 +19,29 @@ steps:
       # Build
       - apk add --update file-dev libmagic-static
       - shards install
-      - shards build --production --static
+      - shards build --error-trace --production --static  # production version
       - strip bin/code-preloader
-      # Verify
-      - ./bin/code-preloader --version
+      - ./bin/code-preloader --version  # Simple check
       # Cache
       - mkdir -p /_cache/bin
       - cp -r bin/code-preloader /_cache/bin/$PACKAGE_BASENAME
+
+  - name: test:spec
+    image: crystallang/crystal:1.10.1-alpine
+    environment:
+      PACKAGE_BASENAME: code-preloader_linux_amd64
+    volumes:
+      - name: cache
+        path: /_cache
+    commands:
+      - pwd
+      # Upgrade alpine to 3.19
+      - sed -i -e 's,alpine/v3.17,alpine/v3.19,' /etc/apk/repositories
+      - apk upgrade --available && sync
+      # Build
+      - apk add --update file-dev libmagic-static
+      - shards install
+      - crystal spec --error-trace
 
   - name: publish:tag
     image: alpine

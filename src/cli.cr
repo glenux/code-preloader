@@ -6,6 +6,7 @@ require "crinja"
 
 require "./config"
 require "./filelist"
+require "./file_storage"
 
 # The CodePreloader module organizes classes and methods related to preloading code files.
 module CodePreloader
@@ -40,35 +41,14 @@ module CodePreloader
       abort("Unexpected nil value for init_options!") if init_options.nil?
 
       # Default path for the .code_preloader.yml file
-      default_config_path = "example.code_preloader.yml"
+      default_config_path = ".code_preloader.yml"
 
       # Use the specified path if provided, otherwise use the default
       config_path = init_options.config_path || default_config_path
+      abort("ERROR: configuration file already exist: #{config_path}") if File.exists? config_path
 
-      # Content of the .code_preloader.yml file
-      config_content = [
-        "---",
-        "# Example configuration for Code-Preloader",
-        "",
-        "# List of repository paths to preload",
-        "# source_list:",
-        "#   - \"path/to/repo1\"",
-        "#   - \"path/to/repo2\"",
-        "",
-        "# List of patterns to ignore during preloading",
-        "ignore_list:",
-        "  - ^\\.git/.*",
-        "",
-        "# Path to the output file (if null, output to STDOUT)",
-        "output_path: null",
-        "",
-        "# Optional: Path to a file containing the header prompt",
-        "header_path: null",
-        "",
-        "# Optional: Path to a file containing the footer prompt",
-        "footer_path: null",
-        ""
-      ].join("\n")
+      # Content of the default .code_preloader.yml file 
+      config_content = FileStorage.get("default_config.yml").gets_to_end
 
       # Writing the configuration content to the file
       File.write(config_path, config_content)
@@ -116,8 +96,12 @@ module CodePreloader
         filelist.reject { |path| !!(path =~ Regex.new(ignore_pattern)) }
       end
 
-      abort("No prompt file defined!") if prompt_template_path.nil?
-      prompt_template_content = File.read(prompt_template_path)
+      STDERR.puts "Loading template file from: #{prompt_template_path ? prompt_template_path : "<internal>" }".colorize(:yellow)
+      if prompt_template_path 
+        prompt_template_content = File.read(prompt_template_path)
+      else
+        prompt_template_content = FileStorage.get("default_template.j2").gets_to_end
+      end
 
 
       if !prompt_header_path.nil?

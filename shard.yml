@@ -18,6 +18,9 @@ dependencies:
     github: alexherbo2/walk.cr
   version_from_shard:
     github: hugopl/version_from_shard
+  baked_file_system:
+    github: schovi/baked_file_system
+    version: 0.10.0
   # completion:
   #   github: f/completion
 

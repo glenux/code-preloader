@@ -17,5 +17,5 @@ output_path: null
 prompt:
   header_path: null
   footer_path: null
-  template_path: misc/templates/default.j2
+  template_path: null
 #

@@ -1,5 +1,9 @@
 version: 2.0
 shards:
+  completion:
+    git: https://github.com/f/completion.git
+    version: 0.1.0+git.commit.d8799381b2de14430496199260eca64eb329625f
+
   magic:
     git: https://github.com/dscottboggs/magic.cr.git
     version: 1.1.0

@@ -1,5 +1,6 @@
 require "option_parser"
 require "yaml"
+# require "completion"
 
 require "./models/root_config"
 require "./version"
@@ -72,6 +73,8 @@ module CodePreloader
         puts parser
         abort("ERROR: Invalid option #{opt}!")
       end
+
+      # complete_with "code-preloader init", parser
     end
 
     def parse_pack_options(parser) 
@@ -141,6 +144,8 @@ module CodePreloader
         puts parser
         abort("ERROR: Invalid option #{ex}")
       end
+
+      # complete_with "code-preloader pack", parser
     end
 
     def parse_arguments(args : Array(String))
@@ -179,6 +184,8 @@ module CodePreloader
           puts parser
           abort("ERROR: Invalid option #{ex}")
         end
+
+        # complete_with "code-preloader", parser
       end
 
       @parser.try &.parse(args)
@@ -193,6 +200,8 @@ module CodePreloader
       case @subcommand
       when Subcommand::Init then validate_init
       when Subcommand::Pack then validate_pack
+      when Subcommand::None, Subcommand::Help, Subcommand::Version
+        # do nothing
       else
         abort("Unknown subcommand #{@subcommand}")
       end

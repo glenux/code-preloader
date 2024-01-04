@@ -16,6 +16,8 @@ dependencies:
     github: alexherbo2/walk.cr
   version_from_shard:
     github: hugopl/version_from_shard
+  # completion:
+  #   github: f/completion
 
 # description: |
 #   Short description of chatgpt-preloader

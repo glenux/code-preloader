@@ -79,23 +79,24 @@ make install
 
 ## Usage
 
+### Packing directory content
+
 Run Code-Preloader with the following command-line options:
 
 ```
-CodePreloader v0.1.0
-Usage: code-preloader [options] DIR ...
+Usage: code-preloader pack [options] DIR ...
 
-Options:
-    -c FILE, --config=FILE           Load parameters from FILE
+Global options:
+    --version                        Show version
+    -h, --help                       Show this help
+
+Pack options:
     -i REGEXP, --ignore=REGEXP       Ignore file or directory
     -o FILE, --output=FILE           Write output to FILE
     -H FILE, --header-prompt=FILE    Load header prompt from FILE
     -F FILE, --footer-prompt=FILE    Load footer prompt from FILE
-    --version                        Show version
-    -h, --help                       Show this help
+    -c FILE, --config=FILE           Load parameters from FILE
 ```
-
-### Examples
 
 #### Basic Use Case
 
@@ -103,7 +104,7 @@ To preload all files in the `src` directory and output to `result.txt`, while
 ignoring the `git` the `bin` directory, and the result file itself:
 
 ```bash
-./bin/code-preloader -o result.txt -i .git -i result.txt -i bin/ src
+./bin/code-preloader pack -o result.txt -i .git -i result.txt -i bin/ src
 ```
 
 #### Advanced Use Case
@@ -113,7 +114,7 @@ and appending prompts, while ignoring the `git` the `bin` directory, and the
 result file itself:
 
 ```bash
-./bin/code-preloader \
+./bin/code-preloader pack \
     -i .git -i bin/ -i result.txt -i prompts \
     -H prompts/context.txt -F prompts/request-readme.txt \
     src \
@@ -122,7 +123,22 @@ result file itself:
 
 __Note__ `ctrlc` is my alias to `xclip -selection clipboard -i`
 
-#### Advanced with configuration file
+### Creating a config file
+
+Run Code-Preloader with the following command-line options:
+
+```
+Usage: code-preloader init [options]
+
+Global options:
+    --version                        Show version
+    -h, --help                       Show this help
+
+Init options:
+    -c FILE, --config=FILE           Load parameters from FILE
+```
+
+#### Example: Advanced with configuration file
 
 You can also do the same by storing all parameters within a configuration file
 (ex: `code_preloader.yml`).

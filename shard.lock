@@ -1,8 +1,8 @@
 version: 2.0
 shards:
-  completion:
-    git: https://github.com/f/completion.git
-    version: 0.1.0+git.commit.d8799381b2de14430496199260eca64eb329625f
+  crinja:
+    git: https://github.com/straight-shoota/crinja.git
+    version: 0.8.1
 
   magic:
     git: https://github.com/dscottboggs/magic.cr.git

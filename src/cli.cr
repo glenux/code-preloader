@@ -95,6 +95,7 @@ module CodePreloader
     def exec_pack(pack_options)
       abort("Unexpected nil value for pack_options!") if pack_options.nil?
 
+      preloaded_content = {} of String => NamedTuple(mime: String, content: String)
       output_file_path = pack_options.output_file_path
       repository_path_list = pack_options.repository_path_list
       header_prompt_file_path = pack_options.header_prompt_file_path
@@ -134,7 +135,14 @@ module CodePreloader
       STDERR.puts "Processing repository: #{repository_path_list}".colorize(:yellow)
       filelist.each do |file_path|
         STDERR.puts "Processing file: #{file_path}".colorize(:yellow)
-        process_file(file_path, output_file)
+        file_result = process_file(file_path, output_file)
+
+        output_file.puts "@@ File \"#{file_path}\" (Mime-Type: #{file_result[:mime]})"
+        output_file.puts ""
+        if file_result[:text_content] !~ /^\s*$/
+          output_file.puts(file_result[:text_content])
+          output_file.puts ""
+        end
       end
 
       footer_prompt_file_path.try { output_file.puts footer_prompt }
@@ -159,12 +167,10 @@ module CodePreloader
         )
       end
 
-      output_file.puts "@@ File \"#{file_path}\" (Mime-Type: #{mime.inspect})"
-      output_file.puts ""
-      if clean_content !~ /^\s*$/
-        output_file.puts(clean_content)
-        output_file.puts ""
-      end
+      return {
+        mime: mime,
+        text_content: clean_content
+      }
     end
   end
 end

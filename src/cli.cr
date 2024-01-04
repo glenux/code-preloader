@@ -65,8 +65,8 @@ module CodePreloader
         "header_prompt_file_path: null",
         "",
         "# Optional: Path to a file containing the footer prompt",
-        "footer_prompt_file_path: null"
-        "",
+        "footer_prompt_file_path: null",
+        ""
       ].join("\n")
 
   # Writing the configuration content to the file

@@ -1,0 +1,15 @@
+@@REQUEST
+
+I would like to change CLI parameters structure add add two subcommands:
+* init : which will create an example .code_preloader.yml file (with comments)
+* pack : which will create the packed version of the current directory for LLM prompting
+
+Most of current options (except --version and --help) must become options of the pack subcommand.
+
+I already started some changes to achieve this goal, but it is not finished, and I need your help and expert advises.
+
+Can you please tell me :
+* where the changes should occur (which File? which Class? and which method?)
+* what kind of changes must be made there?
+
+Please do not write code yet, simply explain.

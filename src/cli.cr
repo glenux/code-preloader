@@ -37,8 +37,46 @@ module CodePreloader
 
     def exec_init(init_options)
       abort("Unexpected nil value for init_options!") if init_options.nil?
-      abort("FIXME: Not implemented!")
-    end
+
+      # Default path for the .code_preloader.yml file
+      default_config_path = "example.code_preloader.yml"
+
+      # Use the specified path if provided, otherwise use the default
+      config_file_path = init_options.config_file_path || default_config_path
+
+      # Content of the .code_preloader.yml file
+      config_content = [
+        "---",
+        "# Example configuration for Code-Preloader",
+        "",
+        "# List of repository paths to preload",
+        "# repository_path_list:",
+        "#   - \"path/to/repo1\"",
+        "#   - \"path/to/repo2\"",
+        "",
+        "# List of patterns to ignore during preloading",
+        "ignore_list:",
+        "  - \"^\\./\\.git/.*\"",
+        "",
+        "# Path to the output file (if null, output to STDOUT)",
+        "output_file_path: null",
+        "",
+        "# Optional: Path to a file containing the header prompt",
+        "header_prompt_file_path: null",
+        "",
+        "# Optional: Path to a file containing the footer prompt",
+        "footer_prompt_file_path: null"
+        "",
+      ].join("\n")
+
+  # Writing the configuration content to the file
+  File.write(config_file_path, config_content)
+  STDERR.puts "Example configuration file created at: #{config_file_path}"
+    rescue e : Exception
+      STDERR.puts "An error occurred while creating the configuration file: #{e.message}"
+      exit(1)
+
+  end
     
     def exec_version
       abort("FIXME: Not implemented!")

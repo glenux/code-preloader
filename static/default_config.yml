@@ -1,0 +1,24 @@
+---
+# Example configuration for Code-Preloader
+
+# List of repository paths to preload
+# source_list:
+#   - "path/to/repo1"
+#   - "path/to/repo2"
+
+# List of patterns to ignore during preloading
+ignore_list:
+  - ^\.git/.*
+
+# Path to the output file (if null, output to STDOUT)
+output_path: null
+
+prompt:
+  # Optional: Path to a file containing the prompt header
+  header_path: null
+
+  # Optional: Path to a file containing the prompt footer
+  footer_path: null
+
+  # Optional: Path to a file container a jinja template to structure the prompt
+  template_path: null

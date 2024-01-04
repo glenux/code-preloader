@@ -123,9 +123,10 @@ result file itself:
 
 __Note__ `ctrlc` is my alias to `xclip -selection clipboard -i`
 
-### Creating a config file
+### Using a config file
 
-Run Code-Preloader with the following command-line options:
+You can automatically create an empty configuratio file by running
+Code-Preloader with the following command-line options:
 
 ```
 Usage: code-preloader init [options]
@@ -140,8 +141,7 @@ Init options:
 
 #### Example: Advanced with configuration file
 
-You can also do the same by storing all parameters within a configuration file
-(ex: `code_preloader.yml`).
+Given the following configuration file (ex: `code_preloader.yml`).
 
 ```yaml
 ---
@@ -156,7 +156,7 @@ header_prompt_file_path: prompts/context.txt
 footer_prompt_file_path: prompts/request-readme.txt
 ```
 
-Then type
+You can type a shorter command like:
 
 ```bash
 ./bin/code-preloader -c code_preloader.yml src | ctrlc

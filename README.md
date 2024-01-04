@@ -74,7 +74,8 @@ git clone https://code.apps.glenux.net/glenux/code-preloader
 cd code-preloader
 make prepare
 make build
-make install
+sudo make install                 # either to install system-wide
+make install PREFIX=$HOME/.local  # or to install as a user
 ```
 
 ## Usage

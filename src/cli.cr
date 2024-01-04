@@ -69,25 +69,26 @@ module CodePreloader
         ""
       ].join("\n")
 
-  # Writing the configuration content to the file
-  File.write(config_file_path, config_content)
-  STDERR.puts "Example configuration file created at: #{config_file_path}"
+      # Writing the configuration content to the file
+      File.write(config_file_path, config_content)
+      puts "Configuration file created at: #{config_file_path}"
     rescue e : Exception
-      STDERR.puts "An error occurred while creating the configuration file: #{e.message}"
-      exit(1)
-
-  end
+      abort("ERROR: Unable to create the configuration file: #{e.message}")
+    end
     
     def exec_version
-      abort("FIXME: Not implemented!")
+      puts "#{PROGRAM_NAME} v#{VERSION}"
+      exit(0)
     end
 
     def exec_none
-      abort("No command specified!")
+      STDERR.puts @config.parser
+      abort("ERROR: No command specified!")
     end
 
     def exec_help
-      abort("FIXME: Not implemented!")
+      puts @config.parser
+      exit(0)
     end
 
     def exec_pack(pack_options)

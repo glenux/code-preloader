@@ -41,7 +41,6 @@ module CodePreloader
       @init_options = InitOptions.new
 
       parser.banner = [
-        "#{PROGRAM_NAME} v#{VERSION}",
         "Usage: code-preloader init [options]\n",
         "Global options:"
       ].join("\n")
@@ -81,7 +80,6 @@ module CodePreloader
       @pack_options = PackOptions.new
 
       parser.banner = [
-        "#{PROGRAM_NAME} v#{VERSION}",
         "Usage: code-preloader pack [options] DIR ...\n",
         "Global options:"
       ].join("\n")
@@ -151,19 +149,16 @@ module CodePreloader
     def parse_arguments(args : Array(String))
       @parser = OptionParser.new do |parser|
         parser.banner = [
-          "#{PROGRAM_NAME} v#{VERSION}",
           "Usage: code-preloader <subcommand> [options] [DIR] [...]\n",
           "Global options:"
         ].join("\n")
 
         parser.on("--version", "Show version") do
-          STDOUT.puts "#{PROGRAM_NAME} #{VERSION}"
-          exit(0)
+          @subcommand = Subcommand::Version
         end
 
         parser.on("-h", "--help", "Show this help") do
-          STDERR.puts parser
-          exit
+          @subcommand = Subcommand::Help
         end
 
         parser.separator "\nSubcommands:"

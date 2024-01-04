@@ -1,19 +1,21 @@
 ---
 
 ignore_list:
-  - ^\./.git/
+  - ^\./\.git/.*
+  - ^\./\.vagrant/.*
   - ^\./misc/.*
-  - ^\./bin
-  - ^\./lib
-  - ^\./misc
-  - LICENSE
-  - prompts
-  - Makefile
+  - ^\./bin/.*
+  - ^\./lib/.*
+  - ^\./misc/.*
+  - ^\./prompts/.*
+  - ^\./LICENSE
+  - ^\./Makefile
+  - .*\.svg$
 
 output_file_path: null
 
 header_prompt_file_path: null
 
-footer_prompt_file_path: prompts/footer.txt
+footer_prompt_file_path: null
 
 #

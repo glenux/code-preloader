@@ -86,8 +86,10 @@ module CodePreloader
     def parse_pack_options(parser) 
       @pack_options = PackOptions.new
 
-      config_file = detect_config_file
-      config_file.try { |path| load_pack_config(path) }
+      unless ENV["CODE_PRELOADER_DETECT"]? =~ /(no|false|0)/i
+        config_file = detect_config_file 
+        config_file.try { |path| load_pack_config(path) }
+      end
 
       parser.banner = [
         "Usage: code-preloader pack [options] DIR ...\n",
@@ -99,7 +101,7 @@ module CodePreloader
       parser.on(
         "-c FILE", 
         "--config=FILE", 
-        "Load parameters from FILE\n(default: \".code_preload.yml\", if present)"
+        "Load parameters from FILE\n(default: autodetect)"
       ) do |config_file|
         @pack_options.try { |opt| load_pack_config(config_file) }
       end

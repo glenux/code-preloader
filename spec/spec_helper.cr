@@ -1,4 +1,5 @@
 
 require "spec"
 
-# require "../src/"
+ENV["CODE_PRELOADER_DETECT"] = "no"
+

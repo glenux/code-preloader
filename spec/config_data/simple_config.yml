@@ -11,10 +11,11 @@ ignore_list:
   - simple/ignore
 
 # Path to the output file (if null, output to STDOUT)
-output_file_path: simple_output.txt
+output_path: simple_output.txt
 
-# Optional: Path to a file containing the header prompt
-header_prompt_file_path: null
+prompt:
+  # Optional: Path to a file containing the header prompt
+  header_path: null
 
-# Optional: Path to a file containing the footer prompt
-footer_prompt_file_path: null
+  # Optional: Path to a file containing the footer prompt
+  footer_path: null

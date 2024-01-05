@@ -50,7 +50,7 @@ describe CodePreloader::Config do
       config.subcommand.should eq(Config::Subcommand::Pack)
       config.pack_options.should be_truthy
       config.pack_options.try do |opts| 
-        opts.repository_path_list.should eq ["path/to/repo1", "path/to/repo2"]
+        opts.source_list.should eq ["path/to/repo1", "path/to/repo2"]
       end
     end
 
@@ -72,7 +72,7 @@ describe CodePreloader::Config do
       config.subcommand.should eq(Config::Subcommand::Pack)
       config.pack_options.should be_truthy
       config.pack_options.try do |opts|
-        opts.output_file_path.should eq "output.txt"
+        opts.output_path.should eq "output.txt"
       end
     end
 
@@ -88,9 +88,9 @@ describe CodePreloader::Config do
       # Assuming the simple_config.yml has specific settings
       config.pack_options.should be_truthy
       config.pack_options.try do |opts|
-        opts.repository_path_list.should eq ["path/to/repo"]
+        opts.source_list.should eq ["path/to/repo"]
         opts.ignore_list.should eq ["simple/ignore"]
-        opts.output_file_path.should eq "simple_output.txt"
+        opts.output_path.should eq "simple_output.txt"
       end
     end
 
@@ -103,9 +103,9 @@ describe CodePreloader::Config do
       # Assuming the complex_config.yml has specific settings
       config.pack_options.should be_truthy
       config.pack_options.try do |opts|
-        opts.repository_path_list.should eq [repo_path]
+        opts.source_list.should eq [repo_path]
         opts.ignore_list.should eq ["complex/ignore1", "complex/ignore2"]
-        opts.output_file_path.should eq "complex_output.txt"
+        opts.output_path.should eq "complex_output.txt"
       end
     end
 

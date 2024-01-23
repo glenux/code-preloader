@@ -127,7 +127,7 @@ module CodePreloader
 
       STDERR.puts "Processing source directories: #{source_list}".colorize(:yellow)
       processed_files = [] of ProcessedFile
-      filelist.each do |file_path|
+      filelist.to_a.sort.each do |file_path|
         STDERR.puts "Processing file: #{file_path}".colorize(:yellow)
         file_result = process_file(file_path, output_file)
         processed_files << file_result

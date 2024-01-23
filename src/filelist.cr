@@ -46,7 +46,7 @@ module CodePreloader
       seen = Set(String).new
 
       # walk each source
-      @sources.each do |dir|
+      @sources.sort.each do |dir|
         walker = Walk::Down.new(dir)
 
         walker = walker.filter do |path|
@@ -88,7 +88,7 @@ module CodePreloader
       self.each do |path|
         files << path.to_s
       end
-      files
+      files.sort
     end
   end
 end

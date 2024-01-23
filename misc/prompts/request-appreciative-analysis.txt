@@ -1,0 +1,7 @@
+Please focus on «@@ FILE ...» and analyze the content of «@@ FILE "{{FIXME: name of the file you want ot analyze}}"».
+
+Provide your analysis as an appreciative feedback, stating:
+- what you appreciate in current version
+- what you would amplify / augment
+- what you would adjust / change / remplace
+

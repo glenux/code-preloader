@@ -1,0 +1,3 @@
+Focus on the existing «@@ FILE "README.md"». and concentrate on your analysis and appreciative feedback too.
+
+Please take in account each change you propose and write a fixed/improved version of the «@@ FILE "README.md"»

@@ -158,9 +158,12 @@ ignore_list:
   - bin
   - prompts
 
+prompt:
+  header_path: prompts/context.txt
+  footer_path: prompts/request-readme.txt
+  template_path: null
+
 output_file_path: null
-header_prompt_file_path: prompts/context.txt
-footer_prompt_file_path: prompts/request-readme.txt
 ```
 
 Then you can type a shorter command like:
